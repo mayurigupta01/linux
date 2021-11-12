@@ -88,7 +88,7 @@
    
     
   •	**Verify the Output** 
-   - Link to output 
+   - https://github.com/mayurigupta01/linux/blob/master/cmpe283-1-output 
    
   •	**Commit changes to GitHub** 
    - cp MakeFile and cmpe283-1.c to linux/cmpe283
