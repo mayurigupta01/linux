@@ -48,8 +48,6 @@
    
    <img width="574" alt="KernelReady" src="https://user-images.githubusercontent.com/89235391/141539655-0efe3a82-21e5-4864-84cc-40f9839b2458.png">
    
-   <img width="1018" alt="linuxkernel-updated" src="https://user-images.githubusercontent.com/89235391/141539728-533b8269-6535-4b2b-a78e-902604449ab2.png">
-
    
  •	**Create a.c file that will be used to find the capabilities of the  MSR's**
    - vim cmpe283-1.c 
@@ -75,8 +73,9 @@
   •	**Verify the mesaage output from the kernel in system log**    
     - dmesg 
     - rmmod cmpe283-1
-    
-    <img width="709" alt="MSR" src="https://user-images.githubusercontent.com/89235391/141539924-e9b1125c-5950-4b5f-bba6-f7c0cf1788c2.png">
+      
+      
+   <img width="709" alt="MSR" src="https://user-images.githubusercontent.com/89235391/141539924-e9b1125c-5950-4b5f-bba6-f7c0cf1788c2.png">
 
   •	**Verify the other files in project directory** 
     - virtual-machine:~/code# ls
