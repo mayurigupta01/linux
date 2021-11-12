@@ -3,7 +3,7 @@
   -	Configured Ubuntu (64-bit 20.04.3) with 16 Gb RAM, 6 CPU’s and 100 GB storage
   -	run the below commands on the VM.
 
-  •	**Install git **
+  •	**Install git**
 
   -	Sudo apt-get install git 
 
@@ -79,8 +79,9 @@
    <img width="709" alt="MSR" src="https://user-images.githubusercontent.com/89235391/141539924-e9b1125c-5950-4b5f-bba6-f7c0cf1788c2.png">
 
   •	**Verify the other files in project directory** 
-    - virtual-machine:~/code# ls
-      cmpe283-1.c  cmpe283-1.ko  cmpe283-1.mod  cmpe283-1.mod.c  cmpe283-1.mod.o  cmpe283-1.o  linux  Makefile modules.order  Module.symvers 
+    
+   - virtual-machine:~/code# ls
+     cmpe283-1.c  cmpe283-1.ko  cmpe283-1.mod  cmpe283-1.mod.c  cmpe283-1.mod.o  cmpe283-1.o  linux  Makefile modules.order  Module.symvers 
    
    <img width="1257" alt="files" src="https://user-images.githubusercontent.com/89235391/141539991-78fdf2db-fd27-402e-a7c6-92ca2b749eb2.png">
    
