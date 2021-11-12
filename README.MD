@@ -1,18 +1,19 @@
-•	**Configure Linux based virtual machine** 
+  •	**Configure Linux based virtual machine** 
   -	Installed VMware fusion
   -	Configured Ubuntu (64-bit 20.04.3) with 16 Gb RAM, 6 CPU’s and 100 GB storage
   -	run the below commands on the VM.
 
-•	**Install git **
+  •	**Install git **
+
   -	Sudo apt-get install git 
 
-•	**Download the Linux Kernel Source code**
+  •	**Download the Linux Kernel Source code**
   -	git clone https://github.com/mayurigupta01/linux.git (forked the https://github.com/torvalds/linux to my GitHub account.
 
-•	**Go to Linux directory** 
+  •	**Go to Linux directory** 
   - Cd linux/
 
-•	**run the following commands to build the Linux kernel source code**.
+  •	**run the following commands to build the Linux kernel source code**.
    - sudo apt-get install libncurses-dev
    - sudo apt-get install libssl-dev
    - sudo apt install flex
