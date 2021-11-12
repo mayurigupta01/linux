@@ -52,7 +52,8 @@
    
  •	**Create a.c file that will be used to find the capabilities of the  MSR's**
    - vim cmpe283-1.c 
-      File contents/code click here 
+   - File contents
+   - https://github.com/mayurigupta01/linux/blob/master/cmpe283/cmpe283-1.c
      
  •	**Create new kernel module for MSRs**
    - MakeFile 
