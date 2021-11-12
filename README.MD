@@ -1,3 +1,6 @@
+  •	**Cmpleted cmpe283 assignment1 -INDIVIDUAL **
+  
+  
   •	**Configure Linux based virtual machine** 
   -	Installed VMware fusion
   -	Configured Ubuntu (64-bit 20.04.3) with 16 Gb RAM, 6 CPU’s and 100 GB storage
