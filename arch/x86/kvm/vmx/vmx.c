@@ -6078,14 +6078,37 @@ unexpected_vmexit:
 	return 0;
 }
 
+
+
+extern atomic_t total_exits;
+extern atomic_long_t total_cycles;
 static int vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
-{
-	int ret = __vmx_handle_exit(vcpu, exit_fastpath);
+{       
+	int ret ;
+        uint64_t start_cycle, end_cycle, delta_cycle;
+	
+	atomic_inc(&total_exits);
+
+	// start time cpu  cycle  
+	
+	start_cycle = rdtsc();
+        ret =  __vmx_handle_exit(vcpu, exit_fastpath);
+        
+        // end time cpu cycle 
+        end_cycle = rdtsc();
+
+        //calculate the delta 
+	
+	delta_cycle = (end_cycle-start_cycle);
+	
+        atomic64_add(delta_cycle ,&total_cycles);	
+
 
 	/*
 	 * Exit to user space when bus lock detected to inform that there is
 	 * a bus lock in guest.
 	 */
+
 	if (to_vmx(vcpu)->exit_reason.bus_lock_detected) {
 		if (ret > 0)
 			vcpu->run->exit_reason = KVM_EXIT_X86_BUS_LOCK;

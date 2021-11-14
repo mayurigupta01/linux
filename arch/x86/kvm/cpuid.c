@@ -1229,17 +1229,45 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
 	return exact;
 }
 EXPORT_SYMBOL_GPL(kvm_cpuid);
-
+atomic_t total_exits = ATOMIC_INIT(0);
+atomic_long_t total_cycles = ATOMIC_INIT(0);
+EXPORT_SYMBOL(total_exits);
+EXPORT_SYMBOL(total_cycles);
 int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 {
 	u32 eax, ebx, ecx, edx;
+
+        uint64_t total_cycles_var;
 
 	if (cpuid_fault_enabled(vcpu) && !kvm_require_cpl(vcpu, 0))
 		return 1;
 
 	eax = kvm_rax_read(vcpu);
 	ecx = kvm_rcx_read(vcpu);
-	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
+
+	if (eax == 0x4FFFFFFF){
+		eax = atomic_read(&total_exits);
+		printk("printing total exits");
+	        printk("%d",eax);
+	} 
+	else if (eax == 0x4FFFFFFE){
+                total_cycles_var = atomic64_read(&total_cycles);
+		ebx = (total_cycles_var >> 32);
+	        ecx = (total_cycles_var & 0x0FFFFFFFF);
+	        printk("printing total cpu cycles");
+	        printk("%llu",total_cycles_var);	
+        }
+	else {	
+        	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
+       	   }
+
+	printk("printing registers");
+	printk("EAX : %x",eax);
+	printk("EBX : %x",ebx);
+	printk("ECX : %x",ecx);
+	printk("EDX : %x",edx);
+
+
 	kvm_rax_write(vcpu, eax);
 	kvm_rbx_write(vcpu, ebx);
 	kvm_rcx_write(vcpu, ecx);
