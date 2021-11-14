@@ -41,7 +41,9 @@ Question 1: Individual
  
  verify the Output on hypervisor :
  
- <img width="468" alt="image" src="https://user-images.githubusercontent.com/89235391/141673242-f40da944-68cb-457f-8784-5d5153726171.png">
+ 
+ <img width="468" alt="image" src="https://user-images.githubusercontent.com/89235391/141696226-80a8b00d-14ee-4db5-81e6-6faff9be9513.png">
+ 
 
  - Run cpuid -l 0x4FFFFFFE
 
@@ -65,6 +67,6 @@ Question 1: Individual
     To fix the issue followed the -	https://wiki.qemu.org/Hosts/Linux and created a VM .
     Launched VM "./build/x86_64-softmmu/qemu-system-x86_64 -m 4096 -enable-kvm -drive if=virtio,file=test.qcow2,cache=none -cdrom /home/mayuri/Desktop/ubuntu-20.04.3-desktop-amd64.iso -vnc :1
     " 
-    On vnc viewer , used nested VM .
+    On vnc viewer viewed the nested VM .
     
     
