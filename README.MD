@@ -80,7 +80,7 @@
    **Veridy the message log in kernel output.**
    
      - dmesg 
-     - rmmod cmpe283-1
+    
    
    <img width="709" alt="MSR" src="https://user-images.githubusercontent.com/89235391/141539924-e9b1125c-5950-4b5f-bba6-f7c0cf1788c2.png">
 
@@ -104,3 +104,5 @@
     - git commit -m "Initial Commit - This is my cmpe283 Assignment1"
     - git push 
   
+    - sudo rmmod cmpe283-1
+     Clean up the module from kernel , since it is built already it does not need to build again.
