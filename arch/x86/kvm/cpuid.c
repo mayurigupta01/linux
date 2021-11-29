@@ -25,6 +25,9 @@
 #include "trace.h"
 #include "pmu.h"
 
+
+#define EXIT_REASONS_COUNT 70
+
 /*
  * Unlike "struct cpuinfo_x86.x86_capability", kvm_cpu_caps doesn't need to be
  * aligned to sizeof(unsigned long) because it's not accessed via bitops.
@@ -1228,16 +1231,27 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
 			used_max_basic);
 	return exact;
 }
+
 EXPORT_SYMBOL_GPL(kvm_cpuid);
 atomic_t total_exits = ATOMIC_INIT(0);
 atomic_long_t total_cycles = ATOMIC_INIT(0);
+
+
+atomic_t total_exits_reasons[EXIT_REASONS_COUNT];
+atomic_long_t total_cycles_per_exits_reason[EXIT_REASONS_COUNT];
+
 EXPORT_SYMBOL(total_exits);
 EXPORT_SYMBOL(total_cycles);
+
+EXPORT_SYMBOL(total_exits_reasons);
+EXPORT_SYMBOL(total_cycles_per_exits_reason);
+
 int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 {
 	u32 eax, ebx, ecx, edx;
-
-        uint64_t total_cycles_var;
+	char buffer[100];
+        uint8_t index;
+        uint64_t total_cycles_var, total_cycles_per_reason_var;
 
 	if (cpuid_fault_enabled(vcpu) && !kvm_require_cpl(vcpu, 0))
 		return 1;
@@ -1257,6 +1271,79 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 	        printk("printing total cpu cycles");
 	        printk("%llu",total_cycles_var);	
         }
+
+       else if (eax == 0x4FFFFFFD){
+          //first check if ecx input contains a value which is not defined in SDM.
+             if(ecx < 0 || ecx > 69 || ecx == 35 || ecx == 38 || ecx == 42 || ecx == 65){
+               //return 0 in ecx , ebx , eax registers
+               eax = 0;
+	       ebx = 0;
+	       ecx = 0;
+               //return 0xFFFFFFFF in edx
+               edx = 0xFFFFFFFF;
+                 }
+             //check exit reasons defined in SDM but not enabled in KVM.
+               else if (ecx == 3 || ecx == 4 || ecx == 5 || ecx == 6 || ecx == 11 || ecx == 16 || ecx == 17 || ecx == 33 || ecx == 34 || ecx ==51 || ecx == 63 || ecx == 64 || 
+			       ecx == 66 || ecx == 68 || ecx ==69){
+              //return 0 in eax , ebx , ecx , edx
+                eax =0;
+ 	        ebx = 0;
+ 		ecx = 0 ;
+ 		edx= 0;
+                 }
+              
+	     else{
+             //store eax with total exit reasons
+           eax = atomic_read(&total_exits_reasons[ecx]);
+           // set other rgisters to 0
+           ebx = ecx = edx = 0x0;
+           printk("printing the number of exits per exit reason.");
+           for(index = 0; index < EXIT_REASONS_COUNT ; index++) {
+              snprintf(buffer,99, "total Exit for %d happened %d times",index,atomic_read(&total_exits_reasons[index]));
+             // printk("%d",atomic_read(&total_exits_reasons[index]));
+	      printk(buffer);
+          	}
+	     }
+        }
+  
+	else if (eax == 0x4FFFFFFC){
+             if(ecx < 0 || ecx > 69 || ecx == 35 || ecx == 38 || ecx == 42 || ecx == 65){
+                 //return 0 in ecx , ebx , eax registers
+                 eax = 0;
+                 ebx = 0;
+                 ecx = 0;
+  
+                 //return 0xFFFFFFFF in edx
+                 edx = 0xFFFFFFFF;
+                  }
+              //check exit reasons defined in SDM but not enabled in KVM.
+              else if (ecx == 3 || ecx == 4 || ecx == 5 || ecx == 6 || ecx == 11 || ecx == 16 || ecx == 17 || ecx == 33 || ecx == 34 || ecx ==51 || ecx == 63 || ecx == 64 || 
+			      ecx == 66 || ecx == 68 || ecx ==69){
+               //return 0 in eax , ebx , ecx , edx
+                 eax =0;
+                 ebx = 0;
+                 ecx = 0 ;
+                 edx= 0;
+ 
+                  }
+	     else{
+            total_cycles_per_reason_var = atomic64_read(&total_cycles_per_exits_reason[ecx]);
+            //store ebx and ecx registers
+            ebx = (total_cycles_per_reason_var >> 32);
+            ecx = (total_cycles_per_reason_var & 0xFFFFFFFF);
+            // set edx 0
+            edx = 0x0;
+
+            printk("printing the number of processor cycles per exit reason.");
+            for(index = 0; index < EXIT_REASONS_COUNT ; index++) {
+	       snprintf(buffer, 99, "total cpu cycles for %d is %llu",index , atomic64_read(&total_cycles_per_exits_reason[index]));	    
+               //printk("%llu",atomic64_read(&total_cycles_per_exits_reason[index]));
+	       printk(buffer);
+             	}
+		
+	     }
+         }
+
 	else {	
         	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
        	   }
