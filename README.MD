@@ -15,37 +15,54 @@ Assignment is to modify the CPUID emulation code in KVM to report back additiona
 **Question 1**: completed as an Individual
 
 **Question2** :Steps to complete the assignment .
+
 •	Code Change: The code changes have been made in arch/x86/kvm/cpuid.c and arch/x86/kvm/vmx/vmx.c files.
+
 •	Build the linux kernel(Implementation on Hypervisor)
-o	cd linux 
-o	make -j 6 modules
-o	make -j 6
+ 
+   o	cd linux 
+ 
+   o	make -j 6 modules
+
+   o	make -j 6
 
  <img width="418" alt="image" src="https://user-images.githubusercontent.com/89235391/143798659-ba0a671c-4db7-430f-b135-e9b83e5d7097.png">
 
  
 o	create a new installer
+
 o	sudo make INSTALL_MOD_STRIP=1 modules_install
+
 o	sudo make install
+
 o	sudo rmmod kvm_intel
+
 o	sudo rmmod kvm 
+
 o	sudo modprobe kvm -(Loads the Kvm)
+
 o	sudo modprobe kvm_intel (Loads the Kvm_intel)
+
 o	lsmod | grep kvm
 
  <img width="468" alt="image" src="https://user-images.githubusercontent.com/89235391/143798670-3654690d-a25c-4a85-86c8-0678d0769a67.png">
 
 
 •	Test the code on nested Virtual machine.
-o	Nested VM is created as a part of assignment2.
-o	On the nested VM run the following commands
-o	 To test the total exit per reason , cpuid -l 0x4FFFFFFD -s 0
-o	 To test CPU cycles spent to handle the exit, cpuid -l 0x4FFFFFFC -s 0 
+
+  o	Nested VM is created as a part of assignment2.
+  
+  o	On the nested VM run the following commands
+  
+  o	 To test the total exit per reason , cpuid -l 0x4FFFFFFD -s 0
+  
+  o	 To test CPU cycles spent to handle the exit, cpuid -l 0x4FFFFFFC -s 0 
 
 <img width="468" alt="image" src="https://user-images.githubusercontent.com/89235391/143798681-fbd2073f-0915-4ddc-b00a-3384670f9fe4.png">
 
  
-o	On Hypervisor, run dmesg
+ o	On Hypervisor, run dmesg
+ 
 
 <img width="409" alt="image" src="https://user-images.githubusercontent.com/89235391/143798692-bd603022-4594-4427-9c48-d25dc9565773.png">
 
@@ -59,12 +76,15 @@ o	On Hypervisor, run dmesg
 <img width="389" alt="image" src="https://user-images.githubusercontent.com/89235391/143798784-8956a718-a3d8-43f0-ae61-57ff47bcdd67.png">
 
  
-**Question 3** - Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there more exits performed during certain VM operations? Approximately how many exits does a full VM boot entail? 
+**Question 3** - 
+Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there more exits performed during certain VM operations? Approximately how many exits does a full VM boot entail? 
+
 
 The frequency of all exits does not grow very rapidly. As per my observance I see that exit 1 (external interrupt) grew quite rapidly from 33527 to 144716. There are many exits code that were exited 0 times. (e.g. 13 to 27, 50 to 53 , 55-60) 
 Approximately how many exits does a full VM boot entail?
 
 After VM Reboot 
+
 
 <img width="468" alt="image" src="https://user-images.githubusercontent.com/89235391/143798841-ccce7ae1-8f2b-4904-84ab-e59149a0b100.png">
 
@@ -72,6 +92,7 @@ After VM Reboot
 **Question 4 **- Of the exit types defined in the SDM, which are the most frequent? Least?
 
 Most Frequent exits:
+
 •	1 (External interrupt)
 
  <img width="468" alt="image" src="https://user-images.githubusercontent.com/89235391/143798889-a81bb2b4-7c7c-4d50-b861-44b8dda22dc9.png">
